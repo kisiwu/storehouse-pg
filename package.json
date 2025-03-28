@@ -1,0 +1,50 @@
+{
+  "name": "@storehouse/pg",
+  "version": "1.0.0",
+  "description": "PostgreSQL manager for @storehouse/core",
+  "main": "lib/index.js",
+  "scripts": {
+    "doc": "typedoc",
+    "build": "tsc",
+    "lint": "eslint .",
+    "test": "kaukau --require ts-node/register --config kaukau-src.js",
+    "testlib": "kaukau --config kaukau-lib.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kisiwu/storehouse-pg.git"
+  },
+  "keywords": [
+    "storehouse",
+    "pg"
+  ],
+  "author": "demingongo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kisiwu/storehouse-pg/issues"
+  },
+  "homepage": "https://github.com/kisiwu/storehouse-pg#readme",
+  "dependencies": {
+    "@novice1/logger": "^1.5.0",
+    "@storehouse/core": "^1.1.1",
+    "pg": "^8.14.1",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.23.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "@types/chai": "^5.2.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.14",
+    "@types/pg": "^8.11.11",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
+    "kaukau": "^4.0.0",
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.28.1",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.28.0"
+  }
+}
