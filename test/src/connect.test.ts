@@ -16,31 +16,25 @@ describe('connect', function () {
 	it('should init and connect', async () => {
 		// Storehouse.setManagerType(PGManager);
 
-		const config = {
-			database: params('db.database'),
-			host: params('db.host'),
-			port: params('db.port'),
-			user: params('db.user'),
-			password: params('db.password'),
-			ssl: {
-				rejectUnauthorized: false
-			},
-			max: 3,
-			connectionTimeoutMillis: 5000,
-			idleTimeoutMillis: 10000
-		}
-
 		try {
 			Storehouse.add({
 				pg: {
 					type: PGManager<MyPoolClient>,
-					config
+					config: {
+						database: params('db.database'),
+						host: params('db.host'),
+						port: params('db.port'),
+						user: params('db.user'),
+						password: params('db.password'),
+						ssl: {
+							rejectUnauthorized: false
+						},
+						max: 3,
+						connectionTimeoutMillis: 5000,
+						idleTimeoutMillis: 10000
+					}
 				}
 			});
-
-			logger.info('is the using', config.user)
-			logger.info('b', config.database)
-			logger.info('p', config.port)
 
 			const manager = getManager<PGManager<MyPoolClient>>(Storehouse/*, 'pg'*/);
 			if (params('db.schema')) {

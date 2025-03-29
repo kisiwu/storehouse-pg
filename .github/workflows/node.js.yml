@@ -29,3 +29,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+      env:
+        TEST_DB_HOSTNAME: ${{ secrets.TEST_DB_HOSTNAME }}
+        TEST_DB_NAME: ${{ secrets.TEST_DB_NAME }}
+        TEST_DB_PORT: ${{ secrets.TEST_DB_PORT }}
+        TEST_DB_SCHEMA: ${{ secrets.TEST_DB_SCHEMA }}
+        TEST_DB_USER: ${{ secrets.TEST_DB_USER }}
+        TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
