@@ -57,7 +57,7 @@ import { PoolClient } from 'pg'
  * only defined to read the property 'database'
  */
 interface MyPoolClient extends PoolClient {
-    database?: string
+  database?: string
 }
 
 // acquire a client from the pool
@@ -69,7 +69,14 @@ if (conn) {
 // manager
 const localManager = Storehouse.getManager<PGManager<MyPoolClient>>('local')
 if (localManager) {
-  console.log('nb movies', (await localManager.query<{ count: string }>('SELECT count(*) FROM myschema.movies')).rows)
+  console.log(
+    'nb movies',
+    (
+      await localManager.query<{ count: string }>(
+        'SELECT count(*) FROM myschema.movies'
+      )
+    ).rows
+  )
 }
 
 // release a client
@@ -101,17 +108,27 @@ import Storehouse from '@storehouse/core'
 import { getConnection, getManager } from '@storehouse/pg'
 import { PoolClient } from 'pg'
 
+/**
+ * only defined to read the property 'database'
+ */
 interface MyPoolClient extends PoolClient {
-	database?: string
+  database?: string
 }
 
-// connection
+// acquire a client from the pool
 const conn = await getConnection<MyPoolClient>(Storehouse, 'local')
 console.log('retrieved connection for database', conn.database)
 
 // manager
 const manager = getManager(Storehouse, 'local')
-console.log('nb movies', (await manager.query<{ count: string }>('SELECT count(*) FROM myschema.movies')).rows)
+console.log(
+  'nb movies',
+  (
+    await manager.query<{ count: string }>(
+      'SELECT count(*) FROM myschema.movies'
+    )
+  ).rows
+)
 ```
 
 ### Target a schema by default
@@ -125,7 +142,7 @@ import { getManager } from '@storehouse/pg'
 // manager
 const manager = getManager(Storehouse, 'local')
 manager.on('connect', client => {
-	// set the search_path for each new client to 'myschema'
+  // set the search_path for each new client to 'myschema'
   client.query('SET search_path TO myschema')
 })
 
