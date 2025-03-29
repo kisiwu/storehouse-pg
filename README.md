@@ -16,7 +16,6 @@ npm install @storehouse/pg
 
 ### Basic
 
-index.ts
 
 ```ts
 import Storehouse from '@storehouse/core'
