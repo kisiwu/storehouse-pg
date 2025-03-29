@@ -110,19 +110,19 @@ export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> impl
 
     private _registerConnectionEvents() {
         this.on('acquire', () => {
-            Log.info('[%s] acquire', this.name);
+            Log.log('[%s] acquire', this.name);
         });
         this.on('connect', () => {
-            Log.info('[%s] connect', this.name);
+            Log.log('[%s] connect', this.name);
         });
         this.on('error', (err) => {
-            Log.error('[%s] error', this.name, err);
+            Log.error('[%s] %O', this.name, err);
         });
         this.on('release', () => {
-            Log.info('[%s] release', this.name);
+            Log.log('[%s] release', this.name);
         });
         this.on('remove', () => {
-            Log.info('[%s] remove', this.name);
+            Log.log('[%s] remove', this.name);
         });
     }
 
@@ -134,10 +134,4 @@ export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> impl
         await this.releaseAll(err)
         await this.end()
     }
-
-    /*
-    getModel?(name: string): unknown {
-        throw new Error('Method not implemented.');
-    }
-    */
 }

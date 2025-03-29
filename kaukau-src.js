@@ -18,11 +18,11 @@ module.exports = {
   parameters: {
     db: {
       host: process.env.TEST_DB_HOSTNAME || 'localhost',
-      port: process.env.TEST_DB_PORT,
-      database: process.env.TEST_DB_NAME || 'ci',
+      port: !isNaN(parseInt(process.env.TEST_DB_PORT)) ? parseInt(process.env.TEST_DB_PORT) : 5432,
+      database: process.env.TEST_DB_NAME || 'defaultdb',
+      schema: process.env.TEST_DB_SCHEMA || '',
       user: process.env.TEST_DB_USER || 'admin',
-      password: process.env.TEST_DB_PASSWORD || '',
-      ssl: false
+      password: process.env.TEST_DB_PASSWORD || ''
     }
   },
 };

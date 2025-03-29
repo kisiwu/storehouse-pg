@@ -2,13 +2,13 @@ import { Debug } from '@novice1/logger';
 import Storehouse from '@storehouse/core';
 import { PGManager, getManager, getConnection } from '../../src/index';
 import { PoolClient } from 'pg';
+import { randomBytes } from 'crypto';
 
 Debug.enable('@storehouse/pg*');
 
 interface MyPoolClient extends PoolClient {
 	database?: string
 }
-
 
 describe('connect', function () {
 	const { logger, params } = this.ctx.kaukau;
@@ -26,7 +26,9 @@ describe('connect', function () {
 						port: params('db.port'),
 						user: params('db.user'),
 						password: params('db.password'),
-						ssl: params('db.ssl'),
+						ssl: {
+							rejectUnauthorized: false
+						},
 						max: 2,
 						connectionTimeoutMillis: 2000,
 						idleTimeoutMillis: 10000
@@ -34,46 +36,51 @@ describe('connect', function () {
 				}
 			});
 
+			const manager = getManager<PGManager<MyPoolClient>>(Storehouse/*, 'pg'*/);
+			if (params('db.schema')) {
+				manager.on('connect', client => {
+					client.query(`SET search_path TO ${params('db.schema')}`)
+				})
+			}
+
 			const conn = await getConnection<MyPoolClient>(Storehouse, 'pg');// Storehouse.getConnection<Promise<MyPoolClient>>();
 			logger.info('retrieved connection for database', conn.database);
 
-			const manager = getManager<PGManager<MyPoolClient>>(Storehouse/*, 'pg'*/);
-			logger.log('SELECT NOW() =>', await manager.query('SELECT NOW()'));
+			logger.info('SELECT NOW() =>', JSON.stringify((await manager.query('SELECT NOW()')).rows));
 
 			const client = await getConnection<MyPoolClient>(Storehouse);
 
-			/*
-			const newMovie: Movie = {
-			  title: `Last Knight ${Math.ceil(Math.random() * 1000) + 1}`
+			const newMovie = {
+				title: `Last Knight ${randomBytes(6).toString('hex')}`,
+				rate: 3
 			};
-			newMovie.rate = 3;
-			const r = await Movies.insertOne(newMovie);
-			logger.info('added new movie', r.insertedId);
-	    
-			const movies = await Movies.find({}).sort({_id: -1}).limit(1).toArray();
-			if (movies.length) {
-			  const doc = movies[0];
-			  logger.log('new movie title:', doc.title);
-			}
-	  
-			logger.info('deleted movie', await Movies.deleteOne({ _id: r.insertedId }));
-	  
-			logger.log('nb current database movies', await Movies.countDocuments());
-			*/
 
-			//const OtherMovies = getModel<Movie>(Storehouse, 'otherdatabase.movies');
-			//logger.log('nb other database movies', await OtherMovies.countDocuments());
+			const r = await client.query('INSERT INTO movies (title, rate) VALUES ($1, $2)', [
+				newMovie.title,
+				newMovie.rate
+			]);
+
+			logger.info('added new movie', r.rowCount);
+
+			logger.log('nb current database movies', JSON.stringify((await client.query('SELECT count(*) FROM movies')).rows));
+
+			const movies = await client.query<{ id: number, title: string, rate: number }>('SELECT * FROM movies ORDER BY id DESC LIMIT 1');
+			let id: number | undefined;
+			if (movies.rows.length) {
+				const doc = movies.rows[0];
+				logger.info('new movie title:', doc.title);
+				id = doc.id
+			}
+
+			if (id) {
+				logger.info(`deleting movie with id=${id}`)
+				logger.info('deleted movie', JSON.stringify((await client.query('DELETE FROM movies where id = $1', [id])).rowCount));
+			}
+
+			logger.log('nb current database movies', JSON.stringify((await client.query('SELECT count(*) FROM movies')).rows));
 
 			await Storehouse.close(/*true*/);
 			logger.info('closed connections');
-
-			/*
-			await conn.connect();
-	  
-			logger.info(await Movies.countDocuments());
-	  
-			await Storehouse.close();
-			*/
 
 			logger.info('Done');
 		} catch (e) {
