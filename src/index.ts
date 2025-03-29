@@ -104,8 +104,6 @@ export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> impl
         this.name = settings.name || `PG ${Date.now()}_${randomBytes(6).toString('hex')}`;
 
         this._registerConnectionEvents();
-
-        Log.info('[%s] PGPool created. Must call "await PGPool.connect()" to acquire a client from the pool.', this.name);
     }
 
     private _registerConnectionEvents() {
