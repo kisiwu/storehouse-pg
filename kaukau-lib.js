@@ -2,7 +2,7 @@ module.exports = {
   enableLogs: true,
   exitOnFail: true,
   files: 'test/lib',
-  ext: '.test.js',
+  ext: 'js',
   options: {
     bail: false,
     fullTrace: true,

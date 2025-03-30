@@ -130,6 +130,8 @@ export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> impl
 
     async closeConnection(err?: Error | boolean): Promise<void> {
         await this.releaseAll(err)
-        await this.end()
+        if(!this.ended) {
+            await this.end()
+        }
     }
 }

@@ -19,7 +19,7 @@ const compat = new FlatCompat({
 
 export default defineConfig([{
     extends: compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended'),
-    files: ['{src,test}/**/*.{ts,mjs}', '*.{ts,mjs}'],
+    files: ['{src,test}/**/*.{ts}', '*.{ts,mjs}'],
 
     plugins: {
         '@typescript-eslint': typescriptEslint,
@@ -42,6 +42,30 @@ export default defineConfig([{
     },
 },{
     extends: [...compat.extends('eslint:recommended'), mochaPlugin.configs.flat.recommended],
+    files: ['{src,test}/**/*.mjs'],
+
+    plugins: {
+        '@typescript-eslint': typescriptEslint,
+        '@stylistic/js': stylisticJs
+    },
+
+    languageOptions: {
+        globals: {
+            ...globals.node,
+        },
+
+        parser: tsParser,
+        ecmaVersion: 6,
+        sourceType: 'module',
+    },
+
+    rules: {
+        'mocha/no-setup-in-describe': ['off'],
+        '@stylistic/js/quotes': ['warn', 'single'],
+        '@stylistic/js/quote-props': ['error', 'as-needed'],
+    },
+},{
+    extends: [...compat.extends('eslint:recommended'), mochaPlugin.configs.flat.recommended],
     files: ['test/**/*.js', '*.js'],
     
 
@@ -59,6 +83,7 @@ export default defineConfig([{
     },
 
     rules: {
+        'mocha/no-setup-in-describe': ['off'],
         '@stylistic/js/quotes': ['warn', 'single'],
         '@stylistic/js/quote-props': ['error', 'as-needed'],
     },

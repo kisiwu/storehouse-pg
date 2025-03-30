@@ -1,18 +1,19 @@
-const { Debug } = require('@novice1/logger');
-const Storehouse = require('@storehouse/core');
-const { randomBytes } = require('crypto')
-const { PGManager, getManager, getConnection } = require('../../lib/index');
+import logger from '@novice1/logger';
+import Storehouse from '@storehouse/core';
+import { randomBytes } from 'crypto';
+import { PGManager, getManager, getConnection } from '../../lib/index.js';
 
+const { Debug } = logger;
 Debug.enable('@storehouse/pg*');
 
-describe('connect (commonjs)', function () {
+describe('connect (esm)', function () {
 
 	const { logger, params } = this.ctx.kaukau;
 
-	it('should init and connect', async function() {
+	it('should init and connect', async function () {
 		try {
 			Storehouse.add({
-				pg: {
+				pg2: {
 					type: PGManager,
 					config: {
 						database: params('db.database'),
@@ -30,20 +31,20 @@ describe('connect (commonjs)', function () {
 				}
 			});
 
-			const manager = getManager(Storehouse);
+			const manager = getManager(Storehouse, 'pg2');
 			if (params('db.schema')) {
 				manager.on('connect', client => {
 					client.query(`SET search_path TO ${params('db.schema')}`)
 				})
 			}
 
-			const conn = await getConnection(Storehouse, 'pg');// Storehouse.getConnection<Promise<MyPoolClient>>();
+			const conn = await getConnection(Storehouse, 'pg2');// Storehouse.getConnection<Promise<MyPoolClient>>();
 			logger.info('retrieved connection for database', conn.database);
 
 
 			logger.info('SELECT NOW() =>', JSON.stringify((await manager.query('SELECT NOW()')).rows));
 
-			const client = await getConnection(Storehouse);
+			const client = await getConnection(Storehouse, 'pg2');
 
 			const newMovie = {
 				title: `Last Knight ${randomBytes(6).toString('hex')}`,
