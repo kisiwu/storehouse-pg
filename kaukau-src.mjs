@@ -1,4 +1,6 @@
-export default {
+import { defineConfig, defineParameters } from 'kaukau/config'
+
+export default defineConfig({
   enableLogs: true,
   exitOnFail: true,
   files: 'test/src',
@@ -15,7 +17,7 @@ export default {
     ui: 'bdd',
     color: true,
   },
-  parameters: {
+  parameters: defineParameters({
     db: {
       host: process.env.TEST_DB_HOSTNAME || 'localhost',
       port: !isNaN(parseInt(process.env.TEST_DB_PORT)) ? parseInt(process.env.TEST_DB_PORT) : 5432,
@@ -24,5 +26,5 @@ export default {
       user: process.env.TEST_DB_USER || 'admin',
       password: process.env.TEST_DB_PASSWORD || ''
     }
-  },
-};
+  }),
+});
