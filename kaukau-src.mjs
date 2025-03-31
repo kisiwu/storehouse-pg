@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   enableLogs: true,
   exitOnFail: true,
   files: 'test/src',

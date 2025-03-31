@@ -1,8 +1,8 @@
-module.exports = {
+export default {
   enableLogs: true,
   exitOnFail: true,
   files: 'test/lib',
-  ext: 'js',
+  ext: ['.test.mjs', '.test.js'],
   options: {
     bail: false,
     fullTrace: true,

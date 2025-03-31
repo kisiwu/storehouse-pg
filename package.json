@@ -7,8 +7,8 @@
     "doc": "typedoc",
     "build": "tsc",
     "lint": "eslint .",
-    "test": "kaukau --require ts-node/register --config kaukau-src.js",
-    "testlib": "kaukau --config kaukau-lib.js"
+    "test": "kaukau --require ts-node/register --config kaukau-src.mjs",
+    "testlib": "kaukau --config kaukau-lib.mjs"
   },
   "repository": {
     "type": "git",
@@ -43,7 +43,7 @@
     "chai": "^5.2.0",
     "eslint": "^9.23.0",
     "eslint-plugin-mocha": "^10.5.0",
-    "kaukau": "^4.1.0",
+    "kaukau": "^4.1.4",
     "mocha": "^11.1.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.1",

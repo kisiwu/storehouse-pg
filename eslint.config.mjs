@@ -42,7 +42,7 @@ export default defineConfig([{
     },
 },{
     extends: [...compat.extends('eslint:recommended'), mochaPlugin.configs.flat.recommended],
-    files: ['{src,test}/**/*.mjs'],
+    files: ['test/**/*.mjs'],
 
     plugins: {
         '@typescript-eslint': typescriptEslint,
