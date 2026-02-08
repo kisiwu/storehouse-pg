@@ -7,7 +7,7 @@ import { Pool, PoolClient, PoolConfig } from 'pg';
 const Log = Logger.debugger('@storehouse/pg:manager');
 
 export class PgPool<T extends PoolClient = PoolClient> extends Pool {
-    #eventEmmiter: EventEmitter = new EventEmitter();
+    private eventEmmiter: EventEmitter = new EventEmitter();
 
     constructor(config?: PoolConfig) {
         super(config);
@@ -16,15 +16,15 @@ export class PgPool<T extends PoolClient = PoolClient> extends Pool {
         });
     }
 
-    async #connectPromise(): Promise<T> {
+    private async connectPromise(): Promise<T> {
         const client: T = (await super.connect()) as T;
 
         const onReleaseAll = (err?: Error | boolean) => {
             client.release(err);
         };
-        this.#eventEmmiter.on('releaseAll', onReleaseAll);
+        this.eventEmmiter.on('releaseAll', onReleaseAll);
         client.addListener('released', () => {
-            this.#eventEmmiter.off('releaseAll', onReleaseAll);
+            this.eventEmmiter.off('releaseAll', onReleaseAll);
         });
 
         return client;
@@ -43,21 +43,21 @@ export class PgPool<T extends PoolClient = PoolClient> extends Pool {
                     const onReleaseAll = (err?: Error | boolean) => {
                         client.release(err);
                     };
-                    this.#eventEmmiter.on('releaseAll', onReleaseAll);
+                    this.eventEmmiter.on('releaseAll', onReleaseAll);
                     client.addListener('released', () => {
-                        this.#eventEmmiter.off('releaseAll', onReleaseAll);
+                        this.eventEmmiter.off('releaseAll', onReleaseAll);
                     });
                 }
                 callback(err, client, done);
             });
             return;
         } else {
-            return this.#connectPromise();
+            return this.connectPromise();
         }
     }
 
     async releaseAll(err?: Error | boolean) {
-        this.#eventEmmiter.emit('releaseAll', err);
+        this.eventEmmiter.emit('releaseAll', err);
     }
 }
 
@@ -97,10 +97,10 @@ export class PgManager<T extends PoolClient = PoolClient> extends PgPool<T> impl
 
         this.name = settings.name || `Pg ${Date.now()}_${randomBytes(6).toString('hex')}`;
 
-        this.#registerConnectionEvents();
+        this.registerConnectionEvents();
     }
 
-    #registerConnectionEvents() {
+    private registerConnectionEvents() {
         this.on('acquire', () => {
             Log.log('[%s] acquire', this.name);
         });
