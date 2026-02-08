@@ -1,6 +1,6 @@
 import { Debug } from '@novice1/logger';
-import Storehouse from '@storehouse/core';
-import { PGManager, getManager, getConnection } from '../../src/index';
+import { Storehouse } from '@storehouse/core';
+import { PgManager, getManager, getConnection } from '../../src/index';
 import { PoolClient } from 'pg';
 import { randomBytes } from 'crypto';
 
@@ -19,7 +19,7 @@ describe('connect', function () {
 		try {
 			Storehouse.add({
 				pg: {
-					type: PGManager<MyPoolClient>,
+					type: PgManager<MyPoolClient>,
 					config: {
 						database: params('db.database'),
 						host: params('db.host'),
@@ -36,7 +36,7 @@ describe('connect', function () {
 				}
 			});
 
-			const manager = getManager<PGManager<MyPoolClient>>(Storehouse/*, 'pg'*/);
+			const manager = getManager<PgManager<MyPoolClient>>(Storehouse/*, 'pg'*/);
 			if (params('db.schema')) {
 				manager.on('connect', client => {
 					client.query(`SET search_path TO ${params('db.schema')}`)

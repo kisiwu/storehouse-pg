@@ -18,14 +18,14 @@ npm install @storehouse/pg
 
 
 ```ts
-import Storehouse from '@storehouse/core'
-import { PGManager } from '@storehouse/pg'
+import { Storehouse } from '@storehouse/core'
+import { PgManager } from '@storehouse/pg'
 
 // register
 Storehouse.add({
   local: {
-    // type: '@storehouse/pg' if you called Storehouse.setManagerType(PGManager)
-    type: PGManager,
+    // type: '@storehouse/pg' if you called Storehouse.setManagerType(PgManager)
+    type: PgManager,
 
     // pool configuration
     config: {
@@ -48,8 +48,8 @@ Storehouse.add({
 After the manager has been added, you can use it as a pool to query the database.
 
 ```ts
-import Storehouse from '@storehouse/core'
-import { PGManager } from '@storehouse/pg'
+import { Storehouse } from '@storehouse/core'
+import { PgManager } from '@storehouse/pg'
 import { PoolClient } from 'pg'
 
 /**
@@ -66,7 +66,7 @@ if (conn) {
 }
 
 // manager
-const localManager = Storehouse.getManager<PGManager<MyPoolClient>>('local')
+const localManager = Storehouse.getManager<PgManager<MyPoolClient>>('local')
 if (localManager) {
   console.log(
     'nb movies',
@@ -103,7 +103,7 @@ There are methods to help you retrieve the connection and the manager so you don
 Those methods throw an error when they fail.
 
 ```ts
-import Storehouse from '@storehouse/core'
+import { Storehouse } from '@storehouse/core'
 import { getConnection, getManager } from '@storehouse/pg'
 import { PoolClient } from 'pg'
 
@@ -135,7 +135,7 @@ console.log(
 If you need each query to target the same schema and don't want to explicitly write it for every query, you can set the `search_path` each time a client connects.
 
 ```ts
-import Storehouse from '@storehouse/core'
+import { Storehouse } from '@storehouse/core'
 import { getManager } from '@storehouse/pg'
 
 // manager

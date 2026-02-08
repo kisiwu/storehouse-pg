@@ -1,5 +1,5 @@
 import logger from '@novice1/logger';
-import Storehouse from '@storehouse/core';
+import { Storehouse } from '@storehouse/core';
 import { randomBytes } from 'crypto';
 import { PGManager, getManager, getConnection } from '../../lib/index.js';
 

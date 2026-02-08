@@ -1,5 +1,5 @@
 const { Debug } = require('@novice1/logger');
-const Storehouse = require('@storehouse/core');
+const { Storehouse } = require('@storehouse/core');
 const { randomBytes } = require('crypto')
 const { PGManager, getManager, getConnection } = require('../../lib/index');
 
@@ -9,7 +9,7 @@ describe('connect (commonjs)', function () {
 
 	const { logger, params } = this.ctx.kaukau;
 
-	it('should init and connect', async function() {
+	it('should init and connect', async function () {
 		try {
 			Storehouse.add({
 				pg: {

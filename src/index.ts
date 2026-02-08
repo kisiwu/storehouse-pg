@@ -1,90 +1,85 @@
 import Logger from '@novice1/logger';
-import { IManager, ManagerArg } from '@storehouse/core/lib/manager';
-import { Registry } from '@storehouse/core/lib/registry';
-import { randomBytes } from 'crypto';
-import { Pool, PoolClient, PoolConfig } from 'pg'
+import { IManager, ManagerArg, Registry } from '@storehouse/core';
 import { EventEmitter } from 'events';
-
+import { randomBytes } from 'node:crypto';
+import { Pool, PoolClient, PoolConfig } from 'pg';
 
 const Log = Logger.debugger('@storehouse/pg:manager');
 
-
-export class PGPool<T extends PoolClient = PoolClient> extends Pool {
-
-    #eventEmmiter: EventEmitter = new EventEmitter()
+export class PgPool<T extends PoolClient = PoolClient> extends Pool {
+    #eventEmmiter: EventEmitter = new EventEmitter();
 
     constructor(config?: PoolConfig) {
-        super(config)
+        super(config);
         this.on('release', (err, client) => {
-            client.emit('released', err)
-        })
+            client.emit('released', err);
+        });
     }
 
-
-    private async _connectPromise(): Promise<T> {
-        const client: T = await super.connect() as T
+    async #connectPromise(): Promise<T> {
+        const client: T = (await super.connect()) as T;
 
         const onReleaseAll = (err?: Error | boolean) => {
-            client.release(err)
-        }
-        this.#eventEmmiter.on('releaseAll', onReleaseAll)
+            client.release(err);
+        };
+        this.#eventEmmiter.on('releaseAll', onReleaseAll);
         client.addListener('released', () => {
-            this.#eventEmmiter.off('releaseAll', onReleaseAll)
-        })
+            this.#eventEmmiter.off('releaseAll', onReleaseAll);
+        });
 
-        return client
+        return client;
     }
 
     connect(): Promise<T>;
     connect(
-        callback?: (err: Error | undefined, client: PoolClient | undefined, done: (release?: unknown) => void) => void,
+        callback?: (err: Error | undefined, client: PoolClient | undefined, done: (release?: unknown) => void) => void
     ): void;
     connect(
         callback?: (err: Error | undefined, client: PoolClient | undefined, done: (release?: unknown) => void) => void
     ): Promise<T> | void {
         if (callback) {
-            super.connect(
-                (err, client, done) => {
-                    if (client) {
-                        const onReleaseAll = (err?: Error | boolean) => {
-                            client.release(err)
-                        }
-                        this.#eventEmmiter.on('releaseAll', onReleaseAll)
-                        client.addListener('released', () => {
-                            this.#eventEmmiter.off('releaseAll', onReleaseAll)
-                        })
-                    }
-                    callback(err, client, done)
+            super.connect((err, client, done) => {
+                if (client) {
+                    const onReleaseAll = (err?: Error | boolean) => {
+                        client.release(err);
+                    };
+                    this.#eventEmmiter.on('releaseAll', onReleaseAll);
+                    client.addListener('released', () => {
+                        this.#eventEmmiter.off('releaseAll', onReleaseAll);
+                    });
                 }
-            )
-            return
+                callback(err, client, done);
+            });
+            return;
         } else {
-            return this._connectPromise()
+            return this.#connectPromise();
         }
     }
 
     async releaseAll(err?: Error | boolean) {
-        this.#eventEmmiter.emit('releaseAll', err)
+        this.#eventEmmiter.emit('releaseAll', err);
     }
 }
 
-
-export interface PGManagerArg extends ManagerArg {
-    config?: PoolConfig,
+export interface PgManagerArg extends ManagerArg {
+    config?: PoolConfig;
 }
 
-export function getManager<M extends PGManager = PGManager>(registry: Registry, managerName?: string): M {
+export function getManager<M extends PgManager = PgManager>(registry: Registry, managerName?: string): M {
     const manager = registry.getManager<M>(managerName);
     if (!manager) {
         throw new ReferenceError(`Could not find manager "${managerName || registry.defaultManager}"`);
     }
-    if (!(manager instanceof PGManager)) {
-        throw new TypeError(`Manager "${managerName || registry.defaultManager}" is not instance of PGManager`);
+    if (!(manager instanceof PgManager)) {
+        throw new TypeError(`Manager "${managerName || registry.defaultManager}" is not instance of PgManager`);
     }
     return manager;
 }
-  
-export async function getConnection<T extends PoolClient = PoolClient>(registry: Registry, managerName?: string): Promise<T> {
+
+export async function getConnection<T extends PoolClient = PoolClient>(
+    registry: Registry,
+    managerName?: string
+): Promise<T> {
     const conn = await registry.getConnection<Promise<T>>(managerName);
     if (!conn) {
         throw new ReferenceError(`Could not find connection "${managerName || registry.defaultManager}"`);
@@ -92,21 +87,20 @@ export async function getConnection<T extends PoolClient = PoolClient>(registry:
     return conn;
 }
 
-export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> implements IManager {
+export class PgManager<T extends PoolClient = PoolClient> extends PgPool<T> implements IManager {
     static readonly type = '@storehouse/pg';
 
     protected name: string;
 
-    constructor(settings: PGManagerArg) {
-
+    constructor(settings: PgManagerArg) {
         super(settings.config);
 
-        this.name = settings.name || `PG ${Date.now()}_${randomBytes(6).toString('hex')}`;
+        this.name = settings.name || `Pg ${Date.now()}_${randomBytes(6).toString('hex')}`;
 
-        this._registerConnectionEvents();
+        this.#registerConnectionEvents();
     }
 
-    private _registerConnectionEvents() {
+    #registerConnectionEvents() {
         this.on('acquire', () => {
             Log.log('[%s] acquire', this.name);
         });
@@ -125,13 +119,13 @@ export class PGManager<T extends PoolClient = PoolClient> extends PGPool<T> impl
     }
 
     getConnection(): Promise<PoolClient> {
-        return this.connect()
+        return this.connect();
     }
 
     async closeConnection(err?: Error | boolean): Promise<void> {
-        await this.releaseAll(err)
-        if(!this.ended) {
-            await this.end()
+        await this.releaseAll(err);
+        if (!this.ended) {
+            await this.end();
         }
     }
 }

@@ -117,3 +117,10 @@ export async function getConnection<T extends PoolClient = PoolClient>(
   return conn;
 }
 ```
+
+Changed:
+- Classes and interfaces that have string PG to Pg (changed case)
+
+Added:
+- health check methods
+- specific errors
