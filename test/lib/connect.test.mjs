@@ -1,7 +1,7 @@
 import { Debug } from '@novice1/logger';
 import { Storehouse } from '@storehouse/core';
 import { randomBytes } from 'crypto';
-import { PGManager, getManager, getConnection } from '../../lib/index.js';
+import { PgManager, getManager, getConnection } from '../../lib/index.js';
 
 Debug.enable('@storehouse/pg*');
 
@@ -13,7 +13,7 @@ describe('connect (esm)', function () {
 		try {
 			Storehouse.add({
 				pg2: {
-					type: PGManager,
+					type: PgManager,
 					config: {
 						database: params('db.database'),
 						host: params('db.host'),

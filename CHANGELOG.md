@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.1] - 2026-11-11
+
+- Update dependencies and peer dependencies.
+
+
 ## [2.0.0] - 2026-02-08
 
 ### Breaking Changes
@@ -18,5 +23,5 @@
 - Dependencies updated to their latest versions
 - README documentation
 
-[Unreleased]: https://github.com/kisiwu/storehouse-pg/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/kisiwu/storehouse-pg/releases/tag/v2.0.0
+[Unreleased]: https://github.com/kisiwu/storehouse-pg/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/kisiwu/storehouse-pg/releases/tag/v2.0.1

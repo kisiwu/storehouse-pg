@@ -1,7 +1,7 @@
 const { Debug } = require('@novice1/logger');
 const { Storehouse } = require('@storehouse/core');
 const { randomBytes } = require('crypto')
-const { PGManager, getManager, getConnection } = require('../../lib/index');
+const { PgManager, getManager, getConnection } = require('../../lib/index');
 
 Debug.enable('@storehouse/pg*');
 
@@ -13,7 +13,7 @@ describe('connect (commonjs)', function () {
 		try {
 			Storehouse.add({
 				pg: {
-					type: PGManager,
+					type: PgManager,
 					config: {
 						database: params('db.database'),
 						host: params('db.host'),

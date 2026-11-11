@@ -17,6 +17,7 @@ eslint.config.mjs
 lint-staged.config.mts
 prettier.config.mts
 tsconfig.json
+tests.md
 
 # Logs
 logs

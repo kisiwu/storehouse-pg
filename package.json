@@ -3,11 +3,20 @@
   "version": "2.0.1",
   "description": "PostgreSQL manager for @storehouse/core",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
+  },
   "scripts": {
     "doc": "typedoc",
     "build": "tsc",
     "lint": "eslint .",
-    "test": "kaukau --require ts-node/register --config kaukau-src.config.mjs",
+    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json kaukau --require ts-node/register --config kaukau-src.config.mjs",
     "test:lib": "kaukau --config kaukau-lib.config.mjs",
     "format": "cross-env NODE_OPTIONS=--experimental-strip-types prettier --write .",
     "format:check": "cross-env NODE_OPTIONS=--experimental-strip-types prettier --check .",

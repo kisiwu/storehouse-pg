@@ -22,6 +22,12 @@ PostgreSQL connection pool manager adapter for [@storehouse/core](https://www.np
 npm install @storehouse/core pg @storehouse/pg
 ```
 
+For TypeScript users, also install the type definitions:
+
+```bash
+npm install --save-dev @types/pg
+```
+
 ## Quick Start
 
 ### 1. Register the Manager
