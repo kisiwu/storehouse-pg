@@ -2,9 +2,13 @@ build
 lib
 dist
 .husky
+.vscode
 coverage
 
 # to ignore package.json, pnpm-lock.yaml, ...
 /*.json
 /*.yaml
 /*.yml
+
+*.md
+tsconfig.json

@@ -1,9 +1,8 @@
-import logger from '@novice1/logger';
+import { Debug } from '@novice1/logger';
 import { Storehouse } from '@storehouse/core';
 import { randomBytes } from 'crypto';
 import { PGManager, getManager, getConnection } from '../../lib/index.js';
 
-const { Debug } = logger;
 Debug.enable('@storehouse/pg*');
 
 describe('connect (esm)', function () {

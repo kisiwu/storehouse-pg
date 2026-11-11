@@ -1,10 +1,10 @@
-import { defineConfig, defineParameters } from 'kaukau/config'
+import { defineConfig, defineParameters } from 'kaukau/config';
 
 export default defineConfig({
   enableLogs: true,
   exitOnFail: true,
   files: 'test/lib',
-  ext: ['.test.mjs', '.test.js'],
+  ext: ['.test.mjs', '.test.cjs'],
   options: {
     bail: false,
     fullTrace: true,
@@ -24,7 +24,7 @@ export default defineConfig({
       database: process.env.TEST_DB_NAME || 'defaultdb',
       schema: process.env.TEST_DB_SCHEMA || '',
       user: process.env.TEST_DB_USER || 'admin',
-      password: process.env.TEST_DB_PASSWORD || ''
-    }
-  })
+      password: process.env.TEST_DB_PASSWORD || '',
+    },
+  }),
 });

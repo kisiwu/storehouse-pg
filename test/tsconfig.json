@@ -1,0 +1,10 @@
+// tests/tsconfig.json
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts", "../src"],
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    "types": ["node", "kaukau"]
+  }
+}

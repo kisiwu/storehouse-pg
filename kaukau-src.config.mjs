@@ -1,4 +1,4 @@
-import { defineConfig, defineParameters } from 'kaukau/config'
+import { defineConfig, defineParameters } from 'kaukau/config';
 
 export default defineConfig({
   enableLogs: true,
@@ -24,7 +24,7 @@ export default defineConfig({
       database: process.env.TEST_DB_NAME || 'defaultdb',
       schema: process.env.TEST_DB_SCHEMA || '',
       user: process.env.TEST_DB_USER || 'admin',
-      password: process.env.TEST_DB_PASSWORD || ''
-    }
+      password: process.env.TEST_DB_PASSWORD || '',
+    },
   }),
 });
